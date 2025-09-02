@@ -1,75 +1,152 @@
+好的，这是一个根据您提供的内容和参考规范生成的 README 文件。
 
-第五届计图人工智能挑战赛，赛道二：人体骨骼生成赛题，B榜第二开源代码
-| 第二届计图挑战赛开源模板
+---
 
-# Jittor 第五届计图人工智能挑战赛 赛道二：人体骨骼生成赛题，闪电松鼠队B榜第二开源代码
-| 标题名称包含赛题、方法
+# 第二届计图挑战赛: 人体姿态与蒙皮权重生成 - 闪电松鼠队方案
 
-![主要结果](https://s3.bmp.ovh/imgs/2022/04/19/440f015864695c92.png)
+| 团队名称 | B榜排名 |
+| :--- | :--- |
+| 闪电松鼠 | 第二 |
 
-｜展示方法的流程特点或者主要结果等
+
+
+上图为我们在B榜测试集上的最终成绩截图。
+
+## 团队信息
+- **团队名称：** 闪电松鼠
+- **B榜排名：** 第二
+- **联系人：** 宋书凯
+- **电话：** 17334598295, 18326660375
+- **微信号：** sks_qaq
+- **微信手机号：** 17334598295
 
 ## 简介
-| 简单介绍项目背景、项目特点
+本项目是第二届计图挑战赛“人体姿态与蒙皮权重生成”赛题的B榜第二名解决方案。我们针对骨骼节点空间位置预测和蒙皮权重预测两个核心任务，设计了相应的模型和训练策略。
 
-本项目包含了第二届计图挑战赛计图 - 草图生成风景比赛的代码实现。本项目的特点是：采用了 XX 方法对 YY 处理，取得了 ZZ 的效果。
+- **骨骼节点预测：** 我们在 `PCT` 的基础上，融合了 `PointNet++` 的多尺度分层抽象思想 (`MultiScaleSA`) 和 `Transformer` (`Point_Transformer_Block`) 来更有效地提取局部及全局特征。此外，我们设计了一个基于锚点的关节预测头 (`JointPredictionHead`)，通过加权平均多个锚点预测的相对偏移来得到最终关节坐标，提升了预测的鲁棒性和精度。
+- **蒙皮权重预测：** 为了减小训练与测试的域分布差异，我们使用上一步预测出的骨骼节点来训练蒙皮模型。我们为每个 (顶点, 关节) 对构建了包含位置、距离、全局上下文等多维度的特征向量，并使用一个简单的 MLP 直接预测其亲和度，取得了良好的效果。
 
-## 安装 
-| 介绍基本的硬件需求、运行环境、依赖安装方法
+## 环境配置
 
-本项目可在 2 张 2080 上运行，训练时间约为 6 小时。
+本项目在以下环境测试通过：
+- **操作系统:** Ubuntu 20.04.3 LTS
+- **Python 版本:** 3.9
+- **CUDA 版本:** 12.2
+- **CUDNN 版本:** 8
 
-#### 运行环境
-- ubuntu 20.04 LTS
-- python >= 3.7
-- jittor >= 1.3.0
+我们提供三种方式来配置运行环境，请根据您的实际情况选择其一：
 
-#### 安装依赖
-执行以下命令安装 python 依赖
+#### 方案一：使用 `environment.yaml` (推荐)
+```bash
+# 从 environment.yaml 文件创建 conda 环境
+conda env create -f environment.yaml
+
+# 激活环境
+conda activate jittor_comp_human
 ```
+
+#### 方案二：使用 `requirements.txt`
+```bash
+# 创建一个新的 conda 环境
+conda create -n jittor_comp_human python=3.9
+conda activate jittor_comp_human
+
+# 安装不高于10版本的gcc/g++ (Jittor编译需要)
+conda install -c conda-forge gcc=10 gxx=10
+
+# 使用pip安装依赖
 pip install -r requirements.txt
 ```
 
-#### 预训练模型
-预训练模型模型下载地址为 https:abc.def.gh，下载后放入目录 `<root>/weights/` 下。
+#### 方案三：直接复制 Conda 环境文件夹 (备选)
+```bash
+# 将项目中的 jittor_comp_human 文件夹完整复制到您的 anaconda envs 目录下
+# 例如: cp -r contest2_闪电松鼠_b榜第二/jittor_comp_human /path/to/your/ananconda3/envs
 
-## 数据预处理
-| 介绍数据预处理方法，可选
-
-将数据下载解压到 `<root>/data` 下，执行以下命令对数据预处理：
-```
-bash scripts/prepross.sh
+# 激活环境
+conda activate jittor_comp_human
 ```
 
-## 训练
-｜ 介绍模型训练的方法
+## 运行步骤
 
-单卡训练可运行以下命令：
-```
-bash scripts/train.sh
-```
+#### 1. 代码与数据准备
 
-多卡训练可以运行以下命令：
-```
-bash scripts/train-multigpu.sh
+首先进入项目根目录：
+```bash
+cd contest2_闪电松鼠_b榜第二/
 ```
 
-## 推理
-｜ 介绍模型推理、测试、或者评估的方法
-
-生成测试集上的结果可以运行以下命令：
-
+请将官方提供的数据集解压后放置于 `data/` 目录下，目录结构应如下所示 (我们已将测试集数据放入)：
 ```
-bash scripts/test.sh
+data/
+├── test/
+└── train/
+```
+项目代码结构说明：
+```
+contest2_闪电松鼠_b榜第二/
+├── checkpoints/      # 预训练的骨骼和蒙皮权重
+├── code/
+│   ├── dataset/      # 数据加载Dataset
+│   ├── PCT/          # PCT模型源码
+│   ├── models/       # 核心模型代码
+│   ├── predict_skeleton.py      # 骨骼节点预测脚本
+│   ├── predict_skin.py          # 蒙皮权重预测脚本
+│   ├── train_skeleton.py        # 骨骼模型训练脚本
+│   └── train_skin.py            # 蒙皮模型训练脚本
+├── jittor_comp_human/             # 预配置的Conda环境 (备选)
+├── requirements.txt
+└── environment.yaml
 ```
 
-## 致谢
-| 对参考的论文、开源库予以致谢，可选
+#### 2. 推理
 
-此项目基于论文 *A Style-Based Generator Architecture for Generative Adversarial Networks* 实现，部分代码参考了 [jittor-gan](https://github.com/Jittor/gan-jittor)。
+所有推理参数都已设置为默认值，使用我们提供的最佳权重直接运行即可。
 
-## 注意事项
+```bash
+# 1. 预测骨骼节点
+# 该脚本会加载 checkpoints/skeleton_pkl/ 目录下4个不同epoch的权重进行集成预测
+python code/predict_skeleton.py
 
-点击项目的“设置”，在Description一栏中添加项目描述，需要包含“jittor”字样。同时在Topics中需要添加jittor。
+# 2. 预测蒙皮权重
+# 该脚本会加载 checkpoints/skin_pkl/ 目录下3个loss最低的权重进行集成预测
+python code/predict_skin.py
+```
 
-![image-20220419164035639](https://s3.bmp.ovh/imgs/2022/04/19/6a3aa627eab5f159.png)
+#### 3. 训练
+
+**注意：** 骨骼模型使用8卡分布式训练，需要预先安装 `OpenMPI`。
+```bash
+# 安装 OpenMPI (针对Ubuntu系统)
+# 参考: https://cg.cs.tsinghua.edu.cn/jittor/tutorial/2020-5-2-16-44-distributed/
+sudo apt install openmpi-bin openmpi-common libopenmpi-dev```
+
+训练脚本如下：
+```bash
+# 使用4卡分布式训练骨骼模型 800 epoch
+# (我们在8卡A100-40G上完成训练，总batch_size为480)
+mpirun -np 4 python code/train_skeleton.py
+
+# 使用单卡训练蒙皮模型 400 epoch
+python code/train_skin.py
+```
+训练过程中生成的权重和日志将保存在 `output/` 目录下。
+
+## Checkpoint 说明
+
+我们提供的预训练权重位于 `checkpoints/` 目录下：
+- **`checkpoints/skeleton_pkl/`**: 包含骨骼模型在800轮训练中，最后4个epoch (796-799) 保存的模型权重。
+- **`checkpoints/skin_pkl/`**: 包含蒙皮模型在400轮训练中，验证集 `skin_loss` 最低的3个模型权重。
+
+推理脚本会自动加载这些权重并进行加权平均集成，以获得更稳定和精确的预测结果。
+
+## 本地与线上结果
+
+- **骨骼模型本地结果:** 我们在训练时未设置专门的验证集，直接保存了最后几轮的模型用于集成。
+- **蒙皮模型本地结果:**
+  - `MSE Loss`: 0.0023
+  - `L1 Loss`: 0.0065
+- **线上结果:** 最终B榜排名第二，详细分数见顶部图片。
+
+## 联系我们
+如果在复现过程中遇到任何问题，请随时通过电话联系我们：**17334598295**。
