@@ -42,25 +42,13 @@ conda install -c conda-forge gcc=10 gxx=10
 pip install -r requirements.txt
 ```
 
-#### 方案三：直接复制 Conda 环境文件夹 (备选)
-```bash
-# 将项目中的 jittor_comp_human 文件夹完整复制到您的 anaconda envs 目录下
-# 例如: cp -r contest2_闪电松鼠_b榜第二/jittor_comp_human /path/to/your/ananconda3/envs
-
-# 激活环境
-conda activate jittor_comp_human
 ```
 
 ## 运行步骤
 
-#### 1. 代码与数据准备
+#### 1. 数据准备
 
-首先进入项目根目录：
-```bash
-cd contest2_闪电松鼠_b榜第二/
-```
-
-请将官方提供的数据集解压后放置于 `data/` 目录下，目录结构应如下所示 (我们已将测试集数据放入)：
+请将官方提供的数据集解压后放置于 `data/` 目录下，目录结构应如下所示：
 ```
 data/
 ├── test/
@@ -68,7 +56,7 @@ data/
 ```
 项目代码结构说明：
 ```
-contest2_闪电松鼠_b榜第二/
+
 ├── checkpoints/      # 预训练的骨骼和蒙皮权重
 ├── code/
 │   ├── dataset/      # 数据加载Dataset
