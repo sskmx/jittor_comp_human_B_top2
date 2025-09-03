@@ -50,26 +50,6 @@ pip install -r requirements.txt
 
 请将官方提供的数据集解压后放置于 `data/` 目录下，目录结构应如下所示：
 ```
-data/
-├── test/
-└── train/
-```
-项目代码结构说明：
-```
-
-├── checkpoints/      # 预训练的骨骼和蒙皮权重
-├── code/
-│   ├── dataset/      # 数据加载Dataset
-│   ├── PCT/          # PCT模型源码
-│   ├── models/       # 核心模型代码
-│   ├── predict_skeleton.py      # 骨骼节点预测脚本
-│   ├── predict_skin.py          # 蒙皮权重预测脚本
-│   ├── train_skeleton.py        # 骨骼模型训练脚本
-│   └── train_skin.py            # 蒙皮模型训练脚本
-├── jittor_comp_human/             # 预配置的Conda环境 (备选)
-├── requirements.txt
-└── environment.yaml
-```
 
 #### 2. 推理
 
