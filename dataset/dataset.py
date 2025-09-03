@@ -71,7 +71,7 @@ class RigDataset(Dataset):
             total_len=len(self.paths),
             shuffle=self.shuffle,
         )
-        self.matrix_basiss = np.load('code/data/track/matrix_basis_all.npz')['arr_0']
+        self.matrix_basiss = np.load('data/track/matrix_basis_all.npz')['arr_0']
     
     def __getitem__(self, index) -> Dict:
         """
