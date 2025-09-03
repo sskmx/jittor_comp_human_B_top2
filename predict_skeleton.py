@@ -108,9 +108,9 @@ def main():
     parser = argparse.ArgumentParser(description='Train a point cloud model')
     
     # Dataset parameters
-    parser.add_argument('--data_root', type=str, default='code/data',
+    parser.add_argument('--data_root', type=str, default='data',
                         help='Root directory for the data files')
-    parser.add_argument('--predict_data_list', type=str, default='code/data/test_list.txt',required=False,
+    parser.add_argument('--predict_data_list', type=str, default='data/test_list.txt',required=False,
                         help='Path to the prediction data list file')
     # Model parameters
     parser.add_argument('--model_name', type=str, default='pct',
