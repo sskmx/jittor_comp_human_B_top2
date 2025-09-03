@@ -179,9 +179,9 @@ def train(args):
 def main():
     parser = argparse.ArgumentParser(description='Train a point cloud model')
     
-    parser.add_argument('--train_data_list', type=str, default='code/data/trainval_list.txt',required=False)
-    parser.add_argument('--val_data_list', type=str, default='code/data/trainval_list.txt', required=False)
-    parser.add_argument('--data_root', type=str, default='code/data')
+    parser.add_argument('--train_data_list', type=str, default='data/trainval_list.txt',required=False)
+    parser.add_argument('--val_data_list', type=str, default='data/trainval_list.txt', required=False)
+    parser.add_argument('--data_root', type=str, default='data')
     parser.add_argument('--model_name', type=str, default='pct')
     parser.add_argument('--pretrained_model', type=str, default='')
     parser.add_argument('--batch_size', type=int, default=40)
