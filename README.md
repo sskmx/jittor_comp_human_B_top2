@@ -58,11 +58,11 @@ pip install -r requirements.txt
 ```bash
 # 1. 预测骨骼节点
 # 该脚本会加载 checkpoints/skeleton_pkl/ 目录下4个不同epoch的权重进行集成预测
-python code/predict_skeleton.py
+python predict_skeleton.py
 
 # 2. 预测蒙皮权重
 # 该脚本会加载 checkpoints/skin_pkl/ 目录下3个loss最低的权重进行集成预测
-python code/predict_skin.py
+python predict_skin.py
 ```
 
 #### 3. 训练
@@ -77,10 +77,10 @@ sudo apt install openmpi-bin openmpi-common libopenmpi-dev```
 ```bash
 # 使用4卡分布式训练骨骼模型 800 epoch
 # (我们在8卡A100-40G上完成训练，总batch_size为480)
-mpirun -np 4 python code/train_skeleton.py
+mpirun -np 4 python train_skeleton.py
 
 # 使用单卡训练蒙皮模型 400 epoch
-python code/train_skin.py
+python train_skin.py
 ```
 训练过程中生成的权重和日志将保存在 `output/` 目录下。
 
